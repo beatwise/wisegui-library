@@ -42,10 +42,15 @@ OBJS = \
     bin\window.obj \
     bin\wisegui.obj \
 
-wisegui: $(OBJS) $(SDK_OBJS) $(RES_OBJ)     
+OUT_DIR = bin
+
+wisegui: $(OUT_DIR) $(OBJS) $(SDK_OBJS) $(RES_OBJ)     
     $(LIB) $(LIBFLAGS) $(OBJS) /OUT:bin\WiseGuiLibrary.lib
     
-$(OBJS): $(SRCS)
+$(OUT_DIR): 
+    mkdir bin
+        
+$(OBJS): $(SRCS) 
     $(COMPILE) $(CFLAGS) -c $(*B).cpp 
 
          
