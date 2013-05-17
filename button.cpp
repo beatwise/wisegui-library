@@ -55,13 +55,13 @@ void Button::OnMouseUp(int x, int y, int info)
 {
 	_pressed = false;
 	_repaint = true;
+	Notify();
 }
 
 void Button::OnMouseDown(int x, int y, int info) 
 {
 	_pressed = true;
-	_repaint = true;
-	Notify();
+	_repaint = true;	
 }
 
 void Button::OnMouseMove(int x, int y, int info) {}

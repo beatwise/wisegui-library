@@ -58,11 +58,16 @@ private:
 	Bitmap *_bmp;
 	ControlPtr _selected;
 	HWND _hWnd;
+	void *_data;
 
 protected:
 	ControlListener *_listener;
 
 public:
+	void *GetData();
+	void SetData(void *);
+	HWND GetWindowHandle();
+
 	bool _dispose;
 	View(ControlListener *listener);
 	virtual ~View();
@@ -82,7 +87,7 @@ public:
 	void SetSize(int w, int h);
 	void SetBackColor(int a, int r, int g, int b);
 	void SetImageId(int id);
-	void SetControlValue(int index, double value); 
+	void SetControlValue(int index, double value, bool normalize = true); 
 	void UpdateControl(int index); 
 
 	virtual void OnLoad() {}

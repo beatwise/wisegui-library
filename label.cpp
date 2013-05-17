@@ -92,17 +92,17 @@ void Label::OnDraw(Graphics *g)
 	FontFamily ff(wffname.c_str());
 
 	StringFormat sf(0, LANG_NEUTRAL);
-	sf.SetLineAlignment(StringAlignment::StringAlignmentCenter);
+	sf.SetLineAlignment(Gdiplus::StringAlignmentCenter);
 
 	if (_align == TEXT_ALIGN_LEFT)
-		sf.SetAlignment(StringAlignment::StringAlignmentNear);
+		sf.SetAlignment(Gdiplus::StringAlignmentNear);
 	else if (_align == TEXT_ALIGN_CENTER)
-		sf.SetAlignment(StringAlignment::StringAlignmentCenter);
+		sf.SetAlignment(Gdiplus::StringAlignmentCenter);
 	else if (_align == TEXT_ALIGN_RIGHT)
-		sf.SetAlignment(StringAlignment::StringAlignmentFar);
+		sf.SetAlignment(Gdiplus::StringAlignmentFar);
 
 	RectF rf(_x, _y, _w, _h);
-	Font font(&ff, _font_size, FontStyle::FontStyleRegular, UnitPixel);
+	Font font(&ff, _font_size, Gdiplus::FontStyleRegular, UnitPixel);
 	g->DrawString(wtext.c_str(), wtext.length(), &font, rf, &sf, &b);
 
 }

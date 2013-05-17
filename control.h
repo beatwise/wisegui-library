@@ -69,6 +69,8 @@ public:
 	void SetMax(double);
 
 	double GetValue(); 
+	void SetValue(double value);
+
 	virtual void GetNormalValue(double *v); 
 	virtual void SetNormalValue(double v);
 	

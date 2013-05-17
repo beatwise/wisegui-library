@@ -68,6 +68,12 @@ double Control::GetValue()
 	return _value;
 }
 
+void Control::SetValue(double value)
+{
+	_value = value;
+	_repaint = true;
+}
+
 void Control::GetNormalValue(double *v) 
 { 
 	if (_type == CTYPE_BOOL)

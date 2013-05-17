@@ -46,6 +46,7 @@ View::View(ControlListener *listener)
 	_selected = NULL;
 	_listener = listener;
 	_dispose = false;
+	_data = NULL;
 }
 
 View::~View()
@@ -53,6 +54,10 @@ View::~View()
 	for (ClstPtr c = _cl.begin(); c != _cl.end(); c++)
 		delete (*c);		
 }
+
+void *View::GetData() { return _data; } 
+void View::SetData(void *data) { _data = data; }
+HWND View::GetWindowHandle() { return _hWnd; }
 
 void View::SetWindowHandle(HWND hWnd)
 {
@@ -137,14 +142,18 @@ void View::UpdateControl(int index)
 	OnUpdate(index, value);
 }
 
-void View::SetControlValue(int index, double value) 
+void View::SetControlValue(int index, double value, bool normalize)
 {
 	for (ClstPtr c = _cl.begin(); c != _cl.end(); c++)
 	{
 		ControlPtr p = *c;
 		if (p->GetParamIndex() == index)
 		{
-			p->SetNormalValue(value);
+			if (normalize)
+				p->SetNormalValue(value);
+			else
+				p->SetValue(value);
+
 			if (p->_repaint)
 				Redraw(p);
 			break;
