@@ -1,7 +1,7 @@
 /*
   WiseGui Library
 
-  file: view.h
+  file: movie.h
 
   Copyright (c) 2013, Alessandro De Santis
   All rights reserved.
@@ -31,70 +31,36 @@
 
 */
 
-#ifndef __VIEW_
-#define __VIEW_
+#ifndef __MOVIE_
+#define __MOVIE_
 
 #include <windows.h>
 #include <gdiplus.h>
 using namespace Gdiplus;
 
-#include <list>
+#include <string>
 using namespace std;
 
-#include "controls.h"
+#include "control.h"
 
-#define UPDATE_REQ_TYPE_INDIRECT	0
-#define UPDATE_REQ_TYPE_DIRECT		1
-
-typedef list<ControlPtr> ControlsList;
-typedef ControlsList::iterator ClstPtr;
-
-class View
+class Movie 
+	: public Control
 {
 private:
-
-	ControlsList _cl;	
-	Bitmap *_gbuf;
-	int _w, _h;
-	Color _backcolor;
-	Bitmap *_bmp;
-	ControlPtr _selected;
-	HWND _hWnd;
-	void *_data;
-
-protected:
-	ControlListener *_listener;
+	int _frames;
 
 public:
-	void *GetData();
-	void SetData(void *);
-	HWND GetWindowHandle();
+	Movie();
+	~Movie();
 
-	bool _dispose;
-	View(ControlListener *listener);
-	virtual ~View();
-	void Add(ControlPtr c);
-	ControlPtr GetControl(int index);
-	void SetWindowHandle(HWND hWnd);
-	void UpdateControls();
+	void Create();
+	void OnMouseUp(int x, int y, int info);
+	void OnMouseDown(int x, int y, int info);
+	void OnMouseMove(int x, int y, int info);
+	void OnDraw(Graphics *g);
 
-	ControlListener *GetListener();
-
-	void Paint(Graphics *g);
-	void MouseDown(int x, int y, int info);
-	void MouseMove(int x, int y, int info);
-	void MouseUp(int x, int y, int info);
-	void Redraw(ControlPtr c);
-
-	void SetSize(int w, int h);
-	void SetBackColor(int a, int r, int g, int b);
+	void SetFrames(int count); 
 	void SetImageId(int id);
-	void SetControlValue(int index, double value, 
-		bool normalize = true, bool redraw = true); 
-	void UpdateControl(int index, int update_type); 
-
-	virtual void OnLoad() {}
-	virtual void OnUpdate(int index, double value) {}
 };
 
 #endif

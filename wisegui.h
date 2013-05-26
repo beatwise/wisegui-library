@@ -41,6 +41,7 @@
 #include "wisegui\slider.h"
 #include "wisegui\statebutton.h"
 #include "wisegui\switch.h"
+#include "wisegui\movie.h"
  
 #include "wisegui\listeners.h"
 #include "wisegui\window.h"

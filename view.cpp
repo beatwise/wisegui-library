@@ -135,14 +135,28 @@ void View::SetBackColor(int a, int r, int g, int b)
 
 void View::SetImageId(int id) { _bmp = g_BitmapPool.Load(id); }
 
-void View::UpdateControl(int index) 
+void View::UpdateControl(int index, int update_type)
 {
-	double value = _listener->GetParamValue(index);
-	SetControlValue(index, value); 
-	OnUpdate(index, value);
+	if (update_type == UPDATE_REQ_TYPE_INDIRECT)
+	{
+		double value = _listener->GetParamValue(index);
+		SetControlValue(index, value); 
+		OnUpdate(index, value);
+	}
+	else if (update_type == UPDATE_REQ_TYPE_DIRECT)
+	{
+		ControlPtr c = GetControl(index);
+		if (c != NULL)
+		{
+			Redraw(c);
+			double value; c->GetNormalValue(&value);
+			OnUpdate(index, value);
+		}
+	}
 }
 
-void View::SetControlValue(int index, double value, bool normalize)
+void View::SetControlValue(int index, double value, 
+	bool normalize, bool redraw)
 {
 	for (ClstPtr c = _cl.begin(); c != _cl.end(); c++)
 	{
@@ -154,7 +168,7 @@ void View::SetControlValue(int index, double value, bool normalize)
 			else
 				p->SetValue(value);
 
-			if (p->_repaint)
+			if (p->_repaint && redraw)
 				Redraw(p);
 			break;
 		}

@@ -103,10 +103,13 @@ void Window::SetView(View *pView)
 		::InvalidateRect(_hWnd, NULL, FALSE);
 	}
 }
-
-void Window::RequestControlUpdate(int index, double value) 
+void Window::RequestControlUpdate(int index, double value, int req_type)
 {
-	PostMessage(_hWnd, WM_UPDATE_CONTROL, (WPARAM)index, (LPARAM)0);
+	if (req_type == UPDATE_REQ_TYPE_DIRECT)
+		_view->SetControlValue(index, value, false, false);
+
+	PostMessage(_hWnd, WM_UPDATE_CONTROL, 
+		(WPARAM)index, (LPARAM)req_type);
 }
 
 void Window::RequestViewUpdate()
@@ -171,7 +174,8 @@ LRESULT Window::Messages(UINT message, WPARAM wParam, LPARAM lParam)
 			case WM_UPDATE_CONTROL:
 			{
 				int index = (int)(wParam);
-				_view->UpdateControl(index);
+				int type = (int)(lParam); 
+				_view->UpdateControl(index, type);
 				handled = true;
 			}
 		}

@@ -61,7 +61,8 @@ public:
 
 	View *GetView();
 	void SetView(View *pView);
-	void RequestControlUpdate(int index, double value);
+	void RequestControlUpdate(int index, 
+		double value, int req_type = UPDATE_REQ_TYPE_INDIRECT);
 	void RequestViewUpdate();
 
 	LRESULT Messages(UINT message, WPARAM wParam, LPARAM lParam);

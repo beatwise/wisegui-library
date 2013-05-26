@@ -1,7 +1,7 @@
 /*
   WiseGui Library
 
-  file: view.h
+  file: movie.cpp
 
   Copyright (c) 2013, Alessandro De Santis
   All rights reserved.
@@ -31,70 +31,51 @@
 
 */
 
-#ifndef __VIEW_
-#define __VIEW_
+#include "movie.h"
+#include "wg.h"
 
-#include <windows.h>
-#include <gdiplus.h>
-using namespace Gdiplus;
+Movie::Movie() 
+{ 
+	_type = CTYPE_INT;
+	_frames = 1; 
+}
 
-#include <list>
-using namespace std;
+Movie::~Movie() { }
 
-#include "controls.h"
-
-#define UPDATE_REQ_TYPE_INDIRECT	0
-#define UPDATE_REQ_TYPE_DIRECT		1
-
-typedef list<ControlPtr> ControlsList;
-typedef ControlsList::iterator ClstPtr;
-
-class View
+void Movie::Create() 
 {
-private:
+	_mouse_rect = Gdiplus::Rect(_x, _y, _w, _h);
+	_dirty_rect = _mouse_rect;
 
-	ControlsList _cl;	
-	Bitmap *_gbuf;
-	int _w, _h;
-	Color _backcolor;
-	Bitmap *_bmp;
-	ControlPtr _selected;
-	HWND _hWnd;
-	void *_data;
+	_value = 0;
+}
 
-protected:
-	ControlListener *_listener;
+void Movie::SetFrames(int count) 
+{
+	if (count < 1)
+		count = 1;
 
-public:
-	void *GetData();
-	void SetData(void *);
-	HWND GetWindowHandle();
+	_frames = count;	
+	_min = 0;
+	_max = count - 1;
+}
 
-	bool _dispose;
-	View(ControlListener *listener);
-	virtual ~View();
-	void Add(ControlPtr c);
-	ControlPtr GetControl(int index);
-	void SetWindowHandle(HWND hWnd);
-	void UpdateControls();
+void Movie::SetImageId(int id) { _bmp = g_BitmapPool.Load(id); }
 
-	ControlListener *GetListener();
+void Movie::OnMouseUp(int x, int y, int info) {}
+void Movie::OnMouseDown(int x, int y, int info) {}
+void Movie::OnMouseMove(int x, int y, int info) {}
 
-	void Paint(Graphics *g);
-	void MouseDown(int x, int y, int info);
-	void MouseMove(int x, int y, int info);
-	void MouseUp(int x, int y, int info);
-	void Redraw(ControlPtr c);
+void Movie::OnDraw(Graphics *g) 
+{
+	if (_bmp == NULL)
+		return;
 
-	void SetSize(int w, int h);
-	void SetBackColor(int a, int r, int g, int b);
-	void SetImageId(int id);
-	void SetControlValue(int index, double value, 
-		bool normalize = true, bool redraw = true); 
-	void UpdateControl(int index, int update_type); 
+	int current_frame = (int)_value;
+	if (current_frame >= _frames)
+		current_frame = _frames - 1;
 
-	virtual void OnLoad() {}
-	virtual void OnUpdate(int index, double value) {}
-};
+	Rect r(_x, _y, _w, _h);
+	g->DrawImage(_bmp, r, 0, _h * current_frame, _w, _h, UnitPixel);	
+}
 
-#endif
