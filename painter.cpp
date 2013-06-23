@@ -1,7 +1,7 @@
 /*
   WiseGui Library
 
-  file: control.cpp
+  file: painter.cpp
 
   Copyright (c) 2013, Alessandro De Santis
   All rights reserved.
@@ -31,86 +31,42 @@
 
 */
 
-#include "control.h"
+#include "painter.h"
+#include "wg.h"
 
-Control::Control() 
-{ 
-	_param_index = -1;
-	_repaint = false; 
-	_listener = NULL; 
-	_type = 0;
-	_bmp = NULL;
+Painter::Painter() 
+	: _bmp_overlay(NULL)
+{ 	
+	_type = CTYPE_NONE;
 }
 
-Control::~Control() { };
+Painter::~Painter() { }
 
-void Control::Notify()
+void Painter::Create() 
 {
-	if (_param_index == -1)
+	_mouse_rect = Gdiplus::Rect(_x, _y, _w, _h);
+	_dirty_rect = _mouse_rect;
+
+	_value = 0;
+
+	_bmp_overlay = g_BitmapPool.CreatePrivateBitmap(_w, _h);
+}
+
+void Painter::SetImageId(int id) { _bmp = g_BitmapPool.Load(id); }
+
+void Painter::OnMouseUp(int x, int y, int info) {}
+void Painter::OnMouseDown(int x, int y, int info) {}
+void Painter::OnMouseMove(int x, int y, int info) {}
+
+void Painter::OnDraw(Graphics *g) 
+{
+	if (_bmp == NULL)
 		return;
 
-	if (_listener != NULL)
-	{
-		double v;
-		GetNormalValue(&v);
-		_listener->ParamChanged(_param_index, v); 
-	}
+	Rect r(_x, _y, _w, _h);
+	g->DrawImage(_bmp, r, 0, 0, _w, _h, UnitPixel);	
+	g->DrawImage(_bmp_overlay, r, 0, 0, _w, _h, UnitPixel);	
 }
 
-void Control::SetLocation(int x, int y) { _x = x; _y = y; }
-void Control::SetSize(int w, int h) { _w = w; _h = h; }
+Bitmap *Painter::GetOverlay() { return _bmp_overlay; }
 
-void Control::SetMin(double min) {_min = min;}
-void Control::SetMax(double max) {_max = max;}
-
-double Control::GetValue()
-{
-	return _value;
-}
-
-void Control::SetValue(double value)
-{
-	_value = value;
-	_repaint = true;
-}
-
-void Control::GetNormalValue(double *v) 
-{ 
-	if (_type == CTYPE_BOOL)
-		*v = _value != 0.0;
-	else 
-	{
-		*v = (double)(_value - _min)/ (double)(_max - _min) ; 
-	}
-}
-
-void Control::SetNormalValue(double v) // v [0..1]
-{ 
-	if (v < 0 || v > 1)
-		return;
-
-	if (_type == CTYPE_BOOL)
-		_value = v != 0.0;
-	else if (_type == CTYPE_INT)
-	{
-		_value = (int)( _min + (_max - _min) * v + 0.5f);
-	}
-
-	else
-	{
-		_value = _min + (_max - _min) * v;
-	}
-	_repaint = true;
-}
-
-void Control::SetParamIndex(int index) { _param_index = index; }
-
-int Control::GetParamIndex() { return _param_index ; }
-
-void Control::OnLostFocus() {}
-
-bool Control::HitTest(int x, int y) {return _mouse_rect.Contains(x, y);}	
-
-int Control::GetX() { return _x; }
-
-int Control::GetY() { return _y; }

@@ -84,6 +84,8 @@ public:
 	virtual void OnDraw(Graphics *g) = 0;
 	virtual void OnLostFocus();
 	virtual bool HitTest(int x, int y);
+	int GetX();
+	int GetY();
 };
 
 typedef Control* ControlPtr;

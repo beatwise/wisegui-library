@@ -137,13 +137,13 @@ void View::SetImageId(int id) { _bmp = g_BitmapPool.Load(id); }
 
 void View::UpdateControl(int index, int update_type)
 {
-	if (update_type == UPDATE_REQ_TYPE_INDIRECT)
+	if (update_type == URT_INDIRECT)
 	{
 		double value = _listener->GetParamValue(index);
 		SetControlValue(index, value); 
 		OnUpdate(index, value);
 	}
-	else if (update_type == UPDATE_REQ_TYPE_DIRECT)
+	else if (update_type == URT_DIRECT)
 	{
 		ControlPtr c = GetControl(index);
 		if (c != NULL)
@@ -153,6 +153,18 @@ void View::UpdateControl(int index, int update_type)
 			OnUpdate(index, value);
 		}
 	}
+	else if (update_type == URT_DIRECT2)
+	{
+		ControlPtr c = GetControl(index);
+		if (c != NULL)
+		{			
+			double value;
+			value = c->GetValue();
+			OnUpdate(index, value);
+			//Redraw(c);
+		}
+	}
+
 }
 
 void View::SetControlValue(int index, double value, 
@@ -222,6 +234,12 @@ void View::MouseDown(int x, int y, int info)
 		if (_selected->HitTest(x, y))
 		{
 			_selected->OnMouseDown(x, y, info);
+			
+			OnMouse(_selected->GetParamIndex(), 
+				MOUSE_DOWN, 
+				x - _selected->GetX(), 
+				y - _selected->GetY(), info);
+
 			if (_selected->_repaint)
 				Redraw(_selected);
 			return;
@@ -247,6 +265,12 @@ void View::MouseDown(int x, int y, int info)
 	if (_selected != NULL)
 	{
 		_selected->OnMouseDown(x, y, info);
+
+		OnMouse(_selected->GetParamIndex(), 
+			MOUSE_DOWN, 
+				x - _selected->GetX(), 
+				y - _selected->GetY(), info);
+
 		if (_selected->_repaint)
 			Redraw(_selected);
 	}
@@ -259,6 +283,13 @@ void View::MouseMove(int x, int y, int info)
 		if (_selected != NULL)
 		{
 			_selected->OnMouseMove(x, y, info);
+
+			OnMouse(_selected->GetParamIndex(), 
+				MOUSE_MOVE, 
+				x - _selected->GetX(), 
+				y - _selected->GetY(), info);
+
+
 			if (_selected->_repaint)
 				Redraw(_selected);
 		}
@@ -271,6 +302,12 @@ void View::MouseUp(int x, int y, int info)
 		return;
 
 	_selected->OnMouseUp(x, y, IsLeftButton(info));
+
+	OnMouse(_selected->GetParamIndex(), 
+		MOUSE_UP, 
+				x - _selected->GetX(), 
+				y - _selected->GetY(), info);
+
 	if (_selected->_repaint)
 		Redraw(_selected);
 	//_selected = NULL;   

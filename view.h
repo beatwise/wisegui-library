@@ -43,8 +43,17 @@ using namespace std;
 
 #include "controls.h"
 
+//old defs
 #define UPDATE_REQ_TYPE_INDIRECT	0
 #define UPDATE_REQ_TYPE_DIRECT		1
+//current defs
+#define URT_INDIRECT	0
+#define URT_DIRECT		1
+#define URT_DIRECT2		2
+
+#define MOUSE_DOWN		0
+#define MOUSE_UP		1
+#define MOUSE_MOVE		2
 
 typedef list<ControlPtr> ControlsList;
 typedef ControlsList::iterator ClstPtr;
@@ -95,6 +104,7 @@ public:
 
 	virtual void OnLoad() {}
 	virtual void OnUpdate(int index, double value) {}
+	virtual void OnMouse(int index, int event, int x, int y, int info) {}
 };
 
 #endif

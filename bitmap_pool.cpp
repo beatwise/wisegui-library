@@ -57,6 +57,15 @@ void BitmapPool::Clear()
 	}
 
 	_map2.clear();
+
+	list<Bitmap *>::iterator bmp;
+	for (bmp = _privateBmps.begin(); bmp != _privateBmps.end(); bmp++)
+	{
+		::delete *bmp;
+	}
+
+	_privateBmps.clear();
+
 }
 
 Bitmap *BitmapPool::Load(int id)
@@ -113,3 +122,9 @@ Bitmap *BitmapPool::Load(int id)
 	return re.bmp;
 }
 
+Bitmap *BitmapPool::CreatePrivateBitmap(int w, int h)
+{
+	Bitmap *pb = ::new Bitmap(w, h);
+	_privateBmps.push_back(pb);
+	return pb;
+}

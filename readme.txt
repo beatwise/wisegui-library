@@ -1,5 +1,5 @@
 
-  WiseGui Library (release: alpha 1.2 )
+  WiseGui Library (release: alpha 1.3 )
   -------------------------------
 
   This library was developed to test the skins designed by "Bitwise Gui Editor". 
@@ -37,4 +37,12 @@
   - view, window: extended support for controls update requests
   - added Movie Control
   - fixed bug in example.zip [Example::processReplacing]
+
+
+  Update #3
+  -------------------------------
+
+  - Painter Control: added 
+  - BitmapPool: updated 
+  - View class: added mouse events
 

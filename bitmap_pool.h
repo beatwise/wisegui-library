@@ -40,6 +40,7 @@ using namespace Gdiplus;
 
 #include <string>
 #include <map>
+#include <list>
 using namespace std;
 
 typedef struct
@@ -56,11 +57,15 @@ class BitmapPool
 private:
 	//map<wstring, Bitmap *> _map;
 	map<int, ResEntry> _map2;
+	list<Bitmap *> _privateBmps;
+
 
 public:
 	~BitmapPool();
 	void Clear();
 	Bitmap *Load(int id);
+	Bitmap *CreatePrivateBitmap(int w, int h);
+
 };
 
 #endif

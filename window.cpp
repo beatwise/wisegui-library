@@ -105,7 +105,9 @@ void Window::SetView(View *pView)
 }
 void Window::RequestControlUpdate(int index, double value, int req_type)
 {
-	if (req_type == UPDATE_REQ_TYPE_DIRECT)
+	if (req_type == URT_DIRECT)
+		_view->SetControlValue(index, value, false, false);
+	else if (req_type == URT_DIRECT2)
 		_view->SetControlValue(index, value, false, false);
 
 	PostMessage(_hWnd, WM_UPDATE_CONTROL, 

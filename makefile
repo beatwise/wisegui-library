@@ -18,6 +18,8 @@ SRCS = \
     knob.h knob.cpp \
     label.h label.cpp \
     listeners.h \
+    movie.h movie.cpp \
+    painter.h painter.cpp \
     paraminfo.h paraminfo.cpp \
     slider.h slider.cpp \
     statebutton.h statebutton.cpp \
@@ -34,6 +36,8 @@ OBJS = \
     bin\dropdownlist.obj \
     bin\knob.obj \
     bin\label.obj \
+    bin\movie.obj \
+    bin\painter.obj \
     bin\paraminfo.obj \
     bin\slider.obj \
     bin\statebutton.obj \
